@@ -1,39 +1,56 @@
 # video
 
-#### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+### 介绍
+大数据课程资源网
 
-#### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+### 项目技术栈
+#####后端技术栈
+1. Spring Boot
+2. MyBatis-plus
+3. MySQL
+4. 
 
 
-#### 特技
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+#####前端技术栈
+1. Nginx
+2. Vue
+3. ElementUI
+4. axios
+5. vue-router
+6. Vuex
+7. vue-video-player
+8. vue-cropper
+9. vue-cli
+
+
+### 快速运行
+#####  克隆本项目到本地  
+1. git clone https://gitee.com/yijie777/video.git
+##### 进入vue目录 安装依赖
+2. npm install
+##### 在 localhost:9988 启动项目（端口可以在vue.config.js 中设置）
+3. npm run serve
+##### 运行sql文件
+4. mysql中创建springboot_vue_video并执行sql脚本
+##### 启动springboot
+5. ..
+
+由于我在vue项目中已经配置了端口转发，将数据转发到SpringBoot上，因此项目启动之后，在浏览器中输入http://localhost:9988就可以访问我们的前端项目了，所有的请求通过端口转发将数据传到SpringBoot中（注意此时不要关闭SpringBoot项目）。
+
+
+
+###项目部署
+
+#### 前端
+##### windows下nginx安装
+1. https://www.cnblogs.com/jiangwangxiang/p/8481661.html
+##### 进入vue目录 打包静态资源
+2. npm run build
+##### 复制dist文件夹到nginx根目录
+3. ctrl+c/ctrl+v
+##### cmd启动nginx 或直接双击nginx.exe
+4. start nginx 
+#### 后端
+##### 打包springboot项目运行
+5. java -jar springboot_vue_video.jar
