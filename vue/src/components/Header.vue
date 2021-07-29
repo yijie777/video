@@ -18,19 +18,19 @@
 
       </div>
     </div>
-    <h3>{{ user.nickName||user.username }}</h3>
+    <h3>{{ user.nickName || user.username }}</h3>
     <el-menu :default-active="path"
              class="el-menu-demo"
              mode="horizontal"
              router>
       <el-menu-item index="/home">首页</el-menu-item>
-<!--      <el-menu-item index="/dynamic">动态</el-menu-item>-->
-<!--      <el-menu-item index="/message">消息</el-menu-item>-->
+      <!--      <el-menu-item index="/dynamic">动态</el-menu-item>-->
+      <!--      <el-menu-item index="/message">消息</el-menu-item>-->
       <el-menu-item index="/userInformation">个人中心</el-menu-item>
-<!--      <el-menu-item index="/videoStore">视频中心</el-menu-item>-->
+      <!--      <el-menu-item index="/videoStore">视频中心</el-menu-item>-->
       <el-menu-item index="/videoUpload">上传发布</el-menu-item>
       <el-menu-item index="/blog">热门博客</el-menu-item>
-      <el-menu-item index="/adminManager" :disabled="!(user.roleId === 1||user.roleId===4)" >管理员后台</el-menu-item>
+      <el-menu-item index="/adminManager" :disabled="!(user.roleId === 1||user.roleId===4)">管理员后台</el-menu-item>
     </el-menu>
     <!--      搜索区域-->
     <div style="flex: 1"></div>
@@ -79,7 +79,7 @@ export default {
     this.user = JSON.parse(str)
 
     if (this.user.username === undefined) {
-      const filterArr = ['/login','/register','/','/home','/blog'];
+      const filterArr = ['/login', '/register', '/', '/home', '/blog'];
       const filter = filterArr.indexOf(this.path) === -1;
       if (filter) {
         this.$message({
@@ -89,10 +89,10 @@ export default {
         this.$router.push("/login")
       }
     }
-    const qx14 = ['/adminVideo','/adminManager','/adminUser'];
-    const managerArr=[1,4]
-    if(qx14.indexOf(this.path)!==-1){
-      if(managerArr.indexOf(this.user.roleId)===-1){
+    const qx14 = ['/adminVideo', '/adminManager', '/adminUser'];
+    const managerArr = [1, 4]
+    if (qx14.indexOf(this.path) !== -1) {
+      if (managerArr.indexOf(this.user.roleId) === -1) {
         this.$router.push('/')
         this.$message({
           type: "error",
@@ -117,8 +117,9 @@ export default {
         }
         //是否登录的权限
         if (this.user.username === undefined) {
-          const filterArr = ['/login','/register','/','/home','/blog'];
-          const filter = filterArr.indexOf(val.path) === -1;
+          const filterArr = ['/login', '/register', '/', '/home', '/blog'];
+          console.log(val.path)
+          const filter = filterArr.indexOf(val.path) === -1 && val.path.indexOf("video-list-album") === -1 && val.path.indexOf("search") === -1;
           if (filter) {
             this.$message({
               type: "warning",
@@ -127,7 +128,6 @@ export default {
             this.$router.push("/login")
           }
         }
-
 
 
       },

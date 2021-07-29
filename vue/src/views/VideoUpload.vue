@@ -140,7 +140,9 @@ export default {
                 message: "成功"
 
               })
-              this.$router.go(0)
+              // setTimeout(() => {
+              //   this.$router.go(0)
+              // }, 1000);
             } else {
               this.$message({
                 type: "error",

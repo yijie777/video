@@ -111,6 +111,8 @@ public class FileController {
             FileOutputStream fos1 = new FileOutputStream(new File(zipPath+".zip"));
             ZipUtils.toZip(zipPath, fos1, true);
             video.setEnclosureUrl( filePathConfig.getEnclosurePath()+flag1+".zip");
+            //删除源文件
+           new FileUtil().deleteAllFilesOfDir(new File(zipPath));
         }
 
         String lastVideoUrl = "";
