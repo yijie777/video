@@ -58,7 +58,6 @@ export default {
   methods: {
     //上传图片前的图片验证回调
     beforeAvatarUpload(file) {
-      console.log(file.type)
       //图片格式
       const isJPG = file.type === 'image/jpg' || file.type === 'image/png'||file.type === 'image/jpeg';
       //图片大小

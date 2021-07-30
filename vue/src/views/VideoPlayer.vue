@@ -18,6 +18,8 @@
           <h3>视频选集</h3>
           <el-button type="primary" size="small" :disabled="video.enclosureUrl==null" @click="downloadEnclosure">下载附件<i
               class="el-icon-download el-icon--right"></i></el-button>
+          <el-button type="primary" size="small" @click="dialogVisible=true">下载视频<i
+              class="el-icon-download el-icon--right"></i></el-button>
           <div v-for="(item, index) in phases" :key="index" class="video-list" style="width: 100%">
             <p @click="changePhase(item.videoUrl,index)" :class="{active:categoryIndex===index}"
                style="overflow: hidden;white-space: nowrap; text-overflow:ellipsis; ">
@@ -30,7 +32,26 @@
 
     </el-row>
 
+    <el-dialog title="选择视频" v-model="dialogVisible" width="30%">
+      <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+      <el-checkbox v-model="showName" @change="changeNameOrIndex">显示名字</el-checkbox>
+      <a style="color: red;padding-left: 10px">请勿使用迅雷等软件接管浏览器下载</a>
+      <div style="margin: 15px 0;"></div>
+      <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+        <el-checkbox v-for="(phase,index) in phases" :label="phase.id" :key="phase.id">
+          {{ nameOrIndex(phase.name, index) }}
+        </el-checkbox>
+      </el-checkbox-group>
 
+      <template #footer>
+          <span class="dialog-footer">
+                  <a style="color: red;padding-right: 30px" v-show="showTips">视频压缩中，请稍后...</a>
+
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="downloadVideoByIds" :disabled="checkedCities.length===0">确 定</el-button>
+          </span>
+      </template>
+    </el-dialog>
   </div>
 
 </template>
@@ -62,7 +83,7 @@ export default {
           //类型
           type: "video/mp4",
           //url地址
-          src: ''
+          src: 'http://' + window.server.filesUploadUrl + ':9090/defaultVideo.mp4'
         }],
         //你的封面地址
         poster: '',
@@ -79,10 +100,39 @@ export default {
       phases: [],
       categoryIndex: 0,
       video: {},
-
+      checkedCities: [],
+      checkAll: false,
+      isIndeterminate: false,
+      dialogVisible: false,
+      progressPercent: "",
+      showName: false,
+      showTips: false,
     }
   },
   methods: {
+    nameOrIndex(n, i) {
+      if (this.showName) {
+        return i + '.' + n
+      } else {
+        return i
+      }
+    },
+    changeNameOrIndex() {
+      !this.showName
+    },
+    handleCheckAllChange(val) {
+      const ids = [];
+      this.phases.forEach(function (element) {
+        ids.push(element.id)
+      });
+      this.checkedCities = val ? ids : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.phases.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.phases.length;
+    },
     downloadEnclosure() {
       window.open("http://" + window.server.filesUploadUrl + ":9090/files/download/" + this.video.id)
     },
@@ -102,10 +152,21 @@ export default {
     getVideo() {
       request.get("/video/getOneVideo/" + this.$route.params.id).then(res => {
         this.video = res.data
-        console.log(this.video.enclosureUrl)
       })
     },
+    downloadVideoByIds() {
+      this.showTips = true
+      request.post("/files/packageZip", this.checkedCities).then(res => {
+        if (res.data === '') {
+          this.$message.error("下载发生错误")
+          this.showTips = false
+        } else {
+          window.open("http://" + window.server.filesUploadUrl + ":9090/files/downloadVideo/" + res.data)
+          this.showTips = false
+        }
+      })
 
+    }
 
   },
 
@@ -130,7 +191,7 @@ export default {
 }
 
 .scroll-module {
-  padding:10px;
+  padding: 10px;
   margin-left: 30px;
   margin-right: 30px;
   background-color: rgb(244, 244, 244);
@@ -146,7 +207,7 @@ export default {
   width: 1400px;
   /*margin: 20px 200px;*/
   margin: 0 auto;
-  padding:0 10px 10px 10px;
+  padding: 0 10px 10px 10px;
   border: 1px solid #bdbdbd;
 }
 </style>

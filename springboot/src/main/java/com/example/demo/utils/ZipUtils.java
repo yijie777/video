@@ -72,7 +72,7 @@ public class ZipUtils {
                 in.close();
             }
             long end = System.currentTimeMillis();
-            System.out.println("压缩完成，耗时：" + (end - start) + " ms");
+            log.info("压缩完成，耗时：" + (end - start) + " ms");
         } catch (Exception e) {
             throw new RuntimeException("zip error from ZipUtils", e);
         } finally {

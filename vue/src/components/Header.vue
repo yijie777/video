@@ -58,6 +58,7 @@ export default {
   methods: {
     loginOut() {
       sessionStorage.removeItem("user")
+      this.$router.push("/login")
       this.$router.go(0)
     },
 
@@ -80,7 +81,7 @@ export default {
 
     if (this.user.username === undefined) {
       const filterArr = ['/login', '/register', '/', '/home', '/blog'];
-      const filter = filterArr.indexOf(this.path) === -1;
+      const filter = filterArr.indexOf(this.path) === -1 && this.path.indexOf("video-list-album") === -1 && this.path.indexOf("search") === -1;
       if (filter) {
         this.$message({
           type: "warning",

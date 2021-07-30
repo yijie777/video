@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import CropperImage from "@/views/administratorManager/CropperImage";
+import CropperImage from "@/views/administratorManager/cropper/CropperImage";
 export default {
   name: "Tailoring",
   components: {CropperImage},

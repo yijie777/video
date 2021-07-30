@@ -12,9 +12,6 @@ import java.io.*;
 public class FileUtil {
 
 
-
-
-
     public void downloadFile(String filePath, HttpServletResponse response) throws UnsupportedEncodingException {
 
         File file = new File(filePath);
@@ -51,6 +48,8 @@ public class FileUtil {
             }
         }
     }
+
+
 
     /**
      * 源文件流复制给目标文件流

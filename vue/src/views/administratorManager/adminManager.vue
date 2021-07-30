@@ -7,6 +7,8 @@
         router>
       <el-menu-item index="adminManager/adminVideo">视频管理</el-menu-item>
       <el-menu-item index="adminManager/adminUser">用户管理</el-menu-item>
+      <el-menu-item index="adminManager/adminType">视频类型管理</el-menu-item>
+      <el-menu-item index="adminManager/adminArticleType">博客类型管理</el-menu-item>
     </el-menu>
     <router-view style="flex:1"/>
   </div>

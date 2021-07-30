@@ -29,10 +29,12 @@ const routes = [
                 path: '/adminManager', name: 'AdminManager',redirect: '/adminVideo',component: () =>import("@/views/administratorManager/adminManager"),children: [
                     {path: '/adminVideo', name: 'AdminVideo', component: () => import("@/views/administratorManager/adminVideo")},
                     {path: '/adminUser', name: 'AdminUser', component: () => import("@/views/administratorManager/adminUser")},
+                    {path: '/adminType', name: 'AdminType', component: () => import("@/views/administratorManager/adminType")},
+                    {path: '/adminArticleType', name: 'AdminArticleType', component: () => import("@/views/administratorManager/adminArticleType")},
                 ]
             },
-            {path: 'vueCropper2', name: 'VueCropper2', component: () => import("@/views/administratorManager/VueCropper2")},
-            {path: 'tailoring', name: 'Tailoring', component: () => import("@/views/administratorManager/Tailoring")},
+            {path: 'vueCropper2', name: 'VueCropper2', component: () => import("@/views/administratorManager/cropper/VueCropper2")},
+            {path: 'tailoring', name: 'Tailoring', component: () => import("@/views/administratorManager/cropper/Tailoring")},
         ]
     },
 

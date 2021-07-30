@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.demo.common.Result;
 import com.example.demo.config.FilePathConfig;
 import com.example.demo.entity.Phase;
@@ -17,16 +14,14 @@ import com.example.demo.utils.ZipUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/files")
@@ -55,21 +50,48 @@ public class FileController {
         String originalFilename = file.getOriginalFilename();  // 获取源文件的名称
         // 定义文件的唯一标识（前缀）
         String flag = IdUtil.fastSimpleUUID();
-        String thumbnailUrl = filePathConfig.getImagePath() +flag + "_" + originalFilename;
+        String thumbnailUrl = filePathConfig.getImagePath() + flag + "_" + originalFilename;
         String thumbnailRealPath = filePathConfig.getFileUrl() + thumbnailUrl;
         cn.hutool.core.io.FileUtil.writeBytes(file.getBytes(), thumbnailRealPath);  // 把文件写入到上传的路径
-        return Result.success("http://"+ ip + ":"+ port +thumbnailUrl);  // 返回结果 url
+        return Result.success("http://" + ip + ":" + port + thumbnailUrl);  // 返回结果 url
     }
 
+    //下载附件
     @RequestMapping("/download/{fileUrlId}")
-    public String downLoad(@PathVariable String fileUrlId, HttpServletResponse response) throws UnsupportedEncodingException, FileNotFoundException {
+    public String download(@PathVariable String fileUrlId, HttpServletResponse response) throws UnsupportedEncodingException {
         Video video = videoMapper.selectById(fileUrlId);
-        new FileUtil().downloadFile(filePathConfig.getFileUrl()+video.getEnclosureUrl(), response);
+        new FileUtil().downloadFile(filePathConfig.getFileUrl() + video.getEnclosureUrl(), response);
         return null;
     }
+
+    //打包下载视频
+    @RequestMapping("/downloadVideo/{name}")
+    public String downloadByPath(@PathVariable String name, HttpServletResponse response) throws UnsupportedEncodingException {
+        String packPath = filePathConfig.getFileUrl() + filePathConfig.getVideoPath() + name;
+        new FileUtil().downloadFile(packPath, response);
+        new FileUtil().deleteAllFilesOfDir(new File(packPath));
+        return null;
+    }
+
+    @PostMapping("/packageZip")
+    public Result<?> downloadVideo(@RequestBody List<Long> ids) throws FileNotFoundException {
+        List<Phase> phases = phaseMapper.selectBatchIds(ids);
+        List<File> videoPathList = new ArrayList<>();
+        String uuid = IdUtil.fastSimpleUUID();
+        String filePath = filePathConfig.getFileUrl() + filePathConfig.getVideoPath(); //视频存放的根目录
+
+        for (Phase p : phases) {
+            String videoPath = filePath + p.getVideoUrl().substring(p.getVideoUrl().lastIndexOf("\\"));
+            videoPathList.add(new File(videoPath));
+        }
+        String zipPath = filePath + uuid + ".zip";
+        ZipUtils.toZip(videoPathList, new FileOutputStream(new File(zipPath)));
+        return Result.success(uuid + ".zip");
+    }
+
     @PostMapping("/upload")
     public Result<?> videoUpload(@RequestParam("files") MultipartFile[] videoFiles,
-                                 @RequestParam(value = "enclosureList",required = false) MultipartFile[] enclosureList,
+                                 @RequestParam(value = "enclosureList", required = false) MultipartFile[] enclosureList,
                                  @RequestParam String name,
                                  @RequestParam String describe,
                                  @RequestParam(required = false) Integer userId,
@@ -85,17 +107,17 @@ public class FileController {
         List<Phase> phaseList = new ArrayList<>();
 
         //资源路径前缀
-        String ipPort = "http://"+ ip + ":" + port;
+        String ipPort = "http://" + ip + ":" + port;
 
         //上传附件
-        if(enclosureList!=null){
+        if (enclosureList != null) {
             String flag1 = IdUtil.fastSimpleUUID();
             for (MultipartFile enclosure : enclosureList) {
 
                 String originalFilename = enclosure.getOriginalFilename();//视频标题
                 String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));//视频后缀
 
-                String saveFileName = filePathConfig.getEnclosurePath()+flag1+"\\" + originalFilename+suffix ;
+                String saveFileName = filePathConfig.getEnclosurePath() + flag1 + "\\" + originalFilename + suffix;
                 String fileRealPath = filePathConfig.getFileUrl() + saveFileName;
                 File dest = new File(fileRealPath);
                 if (!dest.getParentFile().exists()) {
@@ -107,12 +129,12 @@ public class FileController {
 
             }
             //压缩文件夹
-            String zipPath=filePathConfig.getFileUrl() + filePathConfig.getEnclosurePath()+flag1;
-            FileOutputStream fos1 = new FileOutputStream(new File(zipPath+".zip"));
+            String zipPath = filePathConfig.getFileUrl() + filePathConfig.getEnclosurePath() + flag1;
+            FileOutputStream fos1 = new FileOutputStream(new File(zipPath + ".zip"));
             ZipUtils.toZip(zipPath, fos1, true);
-            video.setEnclosureUrl( filePathConfig.getEnclosurePath()+flag1+".zip");
+            video.setEnclosureUrl(filePathConfig.getEnclosurePath() + flag1 + ".zip");
             //删除源文件
-           new FileUtil().deleteAllFilesOfDir(new File(zipPath));
+            new FileUtil().deleteAllFilesOfDir(new File(zipPath));
         }
 
         String lastVideoUrl = "";
@@ -173,7 +195,7 @@ public class FileController {
         }
 
         long end = System.currentTimeMillis();
-        log.info("视频："+video.getName()+"上传完成，耗时：" + (end - start) + " ms");
+        log.info("视频：" + video.getName() + "上传完成，耗时：" + (end - start) + " ms");
         return Result.success();
     }
 

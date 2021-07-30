@@ -36,6 +36,7 @@
 ##### 启动springboot
 5. ..
 
+上传功能还需下载ffmpeg 并在springboot util中的ThumbnailThread 和TranscodingThread中修改ffmpeg的路径
 由于我在vue项目中已经配置了端口转发，将数据转发到SpringBoot上，因此项目启动之后，在浏览器中输入http://localhost:9988就可以访问我们的前端项目了，所有的请求通过端口转发将数据传到SpringBoot中（注意此时不要关闭SpringBoot项目）。
 
 
@@ -50,8 +51,10 @@
 2. npm run build
 ##### 复制dist文件夹到nginx根目录
 3. ctrl+c/ctrl+v
+##### 配置nginx
+4. 
 ##### cmd启动nginx 或直接双击nginx.exe
-4. start nginx 
+5. start nginx 
 #### 后端
 ##### 打包springboot项目运行
-5. java -jar springboot_vue_video.jar
+6. java -jar springboot_vue_video.jar
