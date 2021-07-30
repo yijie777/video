@@ -58,9 +58,6 @@ export default {
     this.load()
   },
   methods: {
-    clickcategory(index) { // 这里我们传入一个当前值
-      this.categoryIndex = index
-    },
 
     goAblum(item) {
       this.$router.push({path: `/${this.path}/${item.id}`})
@@ -73,14 +70,20 @@ export default {
           search: this.search
         }
       }).then(res => {
-        this.videos = res.data.records
+        this.videos = []
+        let _this = this
+
+        res.data.records.forEach(function (video) {
+          video.thumbnailUrl = "http://" + window.server.filesUploadUrl + ":9090" + video.thumbnailUrl
+          _this.videos.push(video)
+        });
         this.total = res.data.total
+
         if (this.total !== 0) {
           this.emptyShow = -1
         } else {
           this.emptyShow = 1
         }
-        console.log(this.total)
       })
     },
     handleCurrentChange(pageNum) {

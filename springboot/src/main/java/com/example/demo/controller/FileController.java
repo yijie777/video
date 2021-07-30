@@ -53,7 +53,7 @@ public class FileController {
         String thumbnailUrl = filePathConfig.getImagePath() + flag + "_" + originalFilename;
         String thumbnailRealPath = filePathConfig.getFileUrl() + thumbnailUrl;
         cn.hutool.core.io.FileUtil.writeBytes(file.getBytes(), thumbnailRealPath);  // 把文件写入到上传的路径
-        return Result.success("http://" + ip + ":" + port + thumbnailUrl);  // 返回结果 url
+        return Result.success(thumbnailUrl);  // 返回结果 url
     }
 
     //下载附件
@@ -107,7 +107,8 @@ public class FileController {
         List<Phase> phaseList = new ArrayList<>();
 
         //资源路径前缀
-        String ipPort = "http://" + ip + ":" + port;
+//        String ipPort = "http://" + ip + ":" + port;
+        String ipPort = "";
 
         //上传附件
         if (enclosureList != null) {

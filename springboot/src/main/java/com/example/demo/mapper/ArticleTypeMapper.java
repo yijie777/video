@@ -6,6 +6,6 @@ import com.example.demo.entity.Video;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface ArticleMapper extends BaseMapper<ArticleType> {
+public interface ArticleTypeMapper extends BaseMapper<ArticleType> {
 
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
 import com.example.demo.config.FilePathConfig;
+import com.example.demo.entity.Blog;
 import com.example.demo.entity.Phase;
 import com.example.demo.entity.Video;
 import com.example.demo.mapper.PhaseMapper;
@@ -35,9 +36,13 @@ public class VideoController {
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
-                              @RequestParam(defaultValue = "") String search) {
+                              @RequestParam(defaultValue = "") String search,
+                                @RequestParam(defaultValue = "") String type) {
 
         LambdaQueryWrapper<Video> lwq = Wrappers.<Video>lambdaQuery();
+        if (StrUtil.isNotBlank(type)) {
+            lwq.like(Video::getType, type);
+        }
         if (StrUtil.isNotBlank(search)) {
             lwq.like(Video::getName, search).or().eq(Video::getType, search);
         }

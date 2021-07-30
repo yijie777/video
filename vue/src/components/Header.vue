@@ -35,13 +35,14 @@
     <!--      搜索区域-->
     <div style="flex: 1"></div>
     <div>
-      <el-input v-model="search" placeholder="请输入关键字" style="width: 70%" clearable></el-input>
+      <el-input v-model="search" :placeholder="placeholderShow" style="width: 70%" clearable></el-input>
       <el-button type="primary" style="margin-left: 5px" @click="searchVideo">搜索</el-button>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "Header",
   data() {
@@ -53,6 +54,7 @@ export default {
       imgPath: 'login',
       user: '',
       searchPath: 'search',
+      placeholderShow: '请输入关键字',
     };
   },
   methods: {
@@ -63,14 +65,22 @@ export default {
     },
 
     searchVideo() {
-      if (this.search === '') {
-        this.$message({
-          type: "warning",
-          message: "请输入关键字"
+      if (this.$route.path.indexOf('/blog') !== -1) {
+        this.$router.push({
+          path: `/blog`,
+          query: {search: this.search}
         })
-        return
+      } else {
+        if (this.search === '') {
+          this.$message({
+            type: "warning",
+            message: "请输入关键字"
+          })
+          return
+        }
+        this.$router.push({path: `/search/${this.search}`, query: {search: this.search}})
       }
-      this.$router.push({path: `/search/${this.search}`})
+
 
     }
   },
@@ -78,7 +88,7 @@ export default {
     //权限
     let str = sessionStorage.getItem("user") || "{}"
     this.user = JSON.parse(str)
-
+    this.user.imgUrl = "http://" + window.server.filesUploadUrl + ":9090" + this.user.imgUrl
     if (this.user.username === undefined) {
       const filterArr = ['/login', '/register', '/', '/home', '/blog'];
       const filter = filterArr.indexOf(this.path) === -1 && this.path.indexOf("video-list-album") === -1 && this.path.indexOf("search") === -1;
@@ -112,7 +122,12 @@ export default {
   watch: {
     $route: {
       handler: function (val, oldVal) {
-
+        if (val.path === '/blog') {
+          this.placeholderShow = '博客搜索！请输入关键字'
+        } else {
+          this.placeholderShow = '请输入关键字'
+        }
+        // 请求服务端，确认当前登录用户的 合法信息
         if (val.path === '/home' && oldVal.path === '/login') {
           this.$router.go(0)
         }

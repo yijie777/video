@@ -54,6 +54,7 @@ export default {
   created() {
     let userStr = sessionStorage.getItem("user") || "{}"
     this.user = JSON.parse(userStr)
+    this.user.imgUrl = "http://" + window.server.filesUploadUrl + ":9090" + this.user.imgUrl
   },
   methods: {
     //上传图片前的图片验证回调
@@ -71,10 +72,11 @@ export default {
       return isJPG && isLt2M
     },
     filesUploadSuccess(res) {
-      this.user.imgUrl2 = res.data
+      this.user.imgUrl2 = "http://" + window.server.filesUploadUrl + ":9090" +res.data
+      console.log(this.user.imgUrl2)
     },
     update() {
-      this.user.imgUrl= this.user.imgUrl2
+      this.user.imgUrl= this.user.imgUrl2.substring(this.user.imgUrl2.indexOf("\\"))
       request.put("/user", this.user).then(res => {
         console.log(res)
         if (res.code === '0') {

@@ -1,6 +1,7 @@
 <template>
   <div style="background-color:rgb(230,236,240);min-width: 1800px">
-    <div style="margin: 20px 200px;background-color: white;border-radius: 5px" v-loading.fullscreen.lock="fullscreenLoading">
+    <div style="margin: 20px 200px;background-color: white;border-radius: 5px"
+         v-loading.fullscreen.lock="fullscreenLoading">
 
       <div style="margin-left: 30px">
         <ul class="home-menu">
@@ -15,9 +16,9 @@
         </ul>
       </div>
 
-      <div  style="min-height: 650px">
+      <div style="min-height: 650px">
         <div v-show="videos.length ===0" style="padding: 100px">
-          <el-empty description="未找到搜索结果" ></el-empty>
+          <el-empty description="未找到搜索结果"></el-empty>
         </div>
         <el-row>
           <el-col :span="6" v-for="(i,index) in videos">
@@ -31,7 +32,6 @@
           </el-col>
         </el-row>
       </div>
-
 
 
       <div style="padding:20px 0 20px 40px">
@@ -65,11 +65,12 @@ export default {
       categoryIndex: -1,
       types: [],
       path: "video-list-album",
-      videos: {},
+      videos: [],
       currentPage: 1,
       search: '',
       pageSize: 8,
       total: 10,
+      type:'',
     }
   },
   created() {
@@ -86,7 +87,7 @@ export default {
     },
     searchByType(typeName, index) {
       this.clickCategory(index)
-      this.search = typeName
+      this.type = typeName
       this.load()
     },
     findTypes() {
@@ -102,11 +103,18 @@ export default {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
-          search: this.search
+          search: this.search,
+          type:this.type
         }
       }).then(res => {
-        this.videos = res.data.records
         this.total = res.data.total
+        this.videos = []
+        let _this = this
+
+        res.data.records.forEach(function (video) {
+          video.thumbnailUrl = "http://" + window.server.filesUploadUrl + ":9090" + video.thumbnailUrl
+          _this.videos.push(video)
+        });
       })
     },
     handleCurrentChange(pageNum) {

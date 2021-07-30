@@ -6,9 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
 import com.example.demo.entity.ArticleType;
-import com.example.demo.entity.Type;
-import com.example.demo.mapper.ArticleMapper;
-import com.example.demo.mapper.TypeMapper;
+import com.example.demo.mapper.ArticleTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping("articletype")
 @CrossOrigin
-public class ArticleController {
+public class ArticleTypeController {
 
     @Autowired
-    ArticleMapper articleMapper;
+    ArticleTypeMapper articleMapper;
 
     @GetMapping
     public Result<?> getAllTypes() {

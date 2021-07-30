@@ -1,12 +1,13 @@
 <template>
   <div style="padding: 10px">
-        <div style="margin: 10px 0">
-          <el-popconfirm title="确定删除吗？" @confirm="delList">
-            <template #reference>
-              <el-button type="primary" v-if="user.roleId===4">批量删除</el-button>
-            </template>
-          </el-popconfirm>
-        </div>
+    <div style="margin: 10px 0">
+      <el-popconfirm title="确定删除吗？" @confirm="delList">
+        <template #reference>
+          <el-button type="primary" v-if="user.roleId===4">批量删除</el-button>
+        </template>
+      </el-popconfirm>
+      <el-button type="primary" v-if="user.roleId===1||user.roleId===4" :onclick="add">新增</el-button>
+    </div>
 
     <!--    搜索区域-->
     <div style="margin: 10px 0">
@@ -18,44 +19,75 @@
         :data="tableData"
         border
         stripe
-        style="width: 100%"
+        style="width: 90vw"
         @selection-change="handleSelectionChange">
       <el-table-column
           type="selection"
           width="55">
       </el-table-column>
       <el-table-column
+          fixed="left"
           prop="id"
           label="ID"
-          sortable>
+          sortable
+      width="80px">
       </el-table-column>
       <el-table-column
-          prop="name"
-          label="名称">
+          fixed="left"
+          width="130px"
+          prop="articleId"
+          label="博客ID">
       </el-table-column>
       <el-table-column
-          prop="info"
-          label="介绍">
+          width="350px"
+          prop="articleTitle"
+          label="标题">
       </el-table-column>
       <el-table-column
-          prop="type"
-          label="类型">
+          width="150px"
+          prop="author"
+          label="作者">
       </el-table-column>
       <el-table-column
-          prop="createTime"
+          width="450px"
+          prop="articleUrl"
+          label="地址">
+      </el-table-column>
+      <el-table-column
+          width="200px"
+          prop="publishDate"
           label="创建时间">
       </el-table-column>
       <el-table-column
-          label="封面">
-        <template #default="scope">
-          <el-image
-              style="width: 100px; height: 100px"
-              :src="scope.row.thumbnailUrl"
-              :preview-src-list="[scope.row.thumbnailUrl]">
-          </el-image>
-        </template>
+          width="350px"
+          prop="articleTags"
+          label="标签">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column
+          width="120px"
+          prop="articleType"
+          label="类型">
+      </el-table-column>
+      <el-table-column
+          width="120px"
+          prop="readCount"
+          label="浏览次数"
+          sortable>
+      </el-table-column>
+      <el-table-column
+          width="120px"
+          prop="collectCount"
+          label="收藏次数"
+          sortable>
+      </el-table-column>
+      <el-table-column
+          width="120px"
+          prop="commentCount"
+          label="评论次数"
+          sortable>
+      </el-table-column>
+      <el-table-column label="操作"  width="150px" fixed="right">
+
         <template #default="scope">
           <el-button size="mini" @click="handleEdit(scope.row)" v-if="user.roleId === 1||user.roleId===4">编辑</el-button>
           <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)" v-if="user.roleId === 1||user.roleId===4">
@@ -65,6 +97,7 @@
           </el-popconfirm>
         </template>
       </el-table-column>
+
     </el-table>
 
     <div style="margin: 10px 0">
@@ -80,26 +113,42 @@
 
       <el-dialog title="提示" v-model="dialogVisible" width="30%">
         <el-form :model="form" label-width="120px">
-          <el-form-item label="名称">
-            <el-input v-model="form.name" style="width: 80%"></el-input>
+          <el-form-item label="博客ID">
+            <el-input v-model="form.articleId" style="width: 80%" :disabled="user.roleId!==4"></el-input>
           </el-form-item>
-          <el-form-item label="介绍">
-            <el-input v-model="form.info" style="width: 80%"></el-input>
+          <el-form-item label="标题">
+            <el-input v-model="form.articleTitle" style="width: 80%" :disabled="user.roleId!==4"></el-input>
           </el-form-item>
-          <el-form-item label="视频类型" prop="type">
-            <el-select v-model="form.type" placeholder="请选择视频类型">
+          <el-form-item label="作者">
+            <el-input v-model="form.author" style="width: 80%" :disabled="user.roleId!==4"></el-input>
+          </el-form-item>
+          <el-form-item label="地址">
+            <el-input v-model="form.articleUrl" style="width: 80%" :disabled="user.roleId!==4"></el-input>
+          </el-form-item>
+          <el-form-item label="创建时间">
+            <el-input v-model="form.publishDate" style="width: 80%" :disabled="user.roleId!==4"></el-input>
+          </el-form-item>
+          <el-form-item label="标签">
+            <el-input v-model="form.articleTags" style="width: 80%" :disabled="user.roleId!==4"></el-input>
+          </el-form-item>
+          <el-form-item label="类型">
+            <el-select v-model="form.articleType" placeholder="请选择视频类型">
               <div v-for="(item, index) in types" :key="index">
                 <el-option :label="item.typeName" :value="item.typeName"></el-option>
               </div>
             </el-select>
           </el-form-item>
-          <el-form-item label="封面">
-            <el-upload ref="upload" :action="filesUploadUrl" :on-success="filesUploadSuccess"
-                       :before-upload="beforeAvatarUpload">
-              <el-button type="primary">点击上传</el-button>
-            </el-upload>
+          <el-form-item label="浏览次数">
+            <el-input v-model="form.readCount" style="width: 80%" :disabled="user.roleId!==4"></el-input>
+          </el-form-item>
+          <el-form-item label="收藏次数">
+            <el-input v-model="form.collectCount" style="width: 80%" :disabled="user.roleId!==4"></el-input>
+          </el-form-item>
+          <el-form-item label="评论次数">
+            <el-input v-model="form.commentCount" style="width: 80%" :disabled="user.roleId!==4"></el-input>
           </el-form-item>
         </el-form>
+
         <template #footer>
           <span class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
@@ -118,22 +167,22 @@
 import request from "@/utils/request";
 
 export default {
-  name: 'AdminVideo',
+  name: 'AdminType',
   components: {},
   data() {
     return {
       selectionList: [],
-      types: [],
+      roles: [],
       user: {},
       loading: true,
       form: {},
       dialogVisible: false,
       search: '',
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       total: 0,
       tableData: [],
-      filesUploadUrl: "http://" + window.server.filesUploadUrl + ":9090/files/uploadTh"
+      types:[],
     }
   },
   created() {
@@ -149,55 +198,17 @@ export default {
     this.load()
   },
   methods: {
-    //上传图片前的图片验证回调
-    beforeAvatarUpload(file) {
-      //图片格式
-      const isJPG = file.type === 'image/jpg' || file.type === 'image/png'|| file.type === 'image/jpeg';
-      //图片大小
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isJPG) {
-        this.$message.error('上传图片只能为jpg或png格式');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过2MB');
-      }
-      const _this = this;
-      const isSize = new Promise(function(resolve, reject) {
-        const img = new Image();
-        const _URL = window.URL || window.webkitURl;
-        img.onload = function() {
-          file.width = img.width;//图片宽度
-          file.height = img.height;//图片高度
-          const valid = img.width/16 ===  img.height/9;//上传图片尺寸判定
-          valid ? resolve() : reject(new Error('error'));
-        };
-        img.src = _URL.createObjectURL(file);
-      }).then(
-          () => {return file;},
-          () => {
-            _this.$message.error('上传图片尺寸必须为16:9(1280×720、1366×768、1920×1080)');
-            return Promise.reject(new Error('error'));
-          }
-      );
-      return isJPG && isLt2M && isSize;
-    },
+
     handleSelectionChange(selection) {
       this.selectionList = []
       selection.forEach(element => {
         this.selectionList.push(element.id)
       });
     },
-    findTypes() {
-      request.get("/type").then(res => {
-        this.types = res.data
-      })
-    },
-    filesUploadSuccess(res) {
-      this.form.thumbnailUrl = "http://" + window.server.filesUploadUrl + ":9090"+res.data
-    },
+
     load() {
       this.loading = true
-      request.get("/video", {
+      request.get("/blog", {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
@@ -205,26 +216,22 @@ export default {
         }
       }).then(res => {
         this.loading = false
+        this.tableData = res.data.records
         this.total = res.data.total
-        this.tableData=[]
-        let _this=this
-        res.data.records.forEach(function(video) {
-          video.thumbnailUrl = "http://" + window.server.filesUploadUrl + ":9090"+ video.thumbnailUrl
-          _this.tableData.push(video)
-        });
+      })
+    },
+    findTypes() {
+      request.get("/articletype").then(res => {
+        this.types = res.data
       })
     },
     add() {
       this.dialogVisible = true
       this.form = {}
-      if (this.$refs['upload']) {
-        this.$refs['upload'].clearFiles()  // 清除历史文件列表
-      }
     },
     save() {
       if (this.form.id) {  // 更新
-        this.form.thumbnailUrl= this.form.thumbnailUrl.substring(this.form.thumbnailUrl.indexOf("\\"))
-        request.put("/video", this.form).then(res => {
+        request.put("/blog", this.form).then(res => {
           if (res.code === '0') {
             this.$message({
               type: "success",
@@ -240,7 +247,7 @@ export default {
           this.dialogVisible = false  // 关闭弹窗
         })
       } else {  // 新增
-        request.post("/video", this.form).then(res => {
+        request.post("/blog", this.form).then(res => {
           if (res.code === '0') {
             this.$message({
               type: "success",
@@ -259,25 +266,15 @@ export default {
       }
 
     },
-    handleEdit(row) {
-      this.form = JSON.parse(JSON.stringify(row))
-      this.dialogVisible = true
-      this.$nextTick(() => {
-        if (this.$refs['upload']) {
-          this.$refs['upload'].clearFiles()  // 清除历史文件列表
-        }
-      })
-
-    },
-    delList(){
-      if(this.selectionList.length===0){
+    delList() {
+      if (this.selectionList.length === 0) {
         this.$message({
           type: "warning",
-          message: "请选择视频"
+          message: "请选择类型"
         })
         return
       }
-      request.post("/video/delList", this.selectionList).then(res => {
+      request.post("/blog/delList", this.selectionList).then(res => {
         if (res.code === '0') {
           this.$message({
             type: "success",
@@ -292,8 +289,13 @@ export default {
         this.load() // 刷新表格的数据
       })
     },
+    handleEdit(row) {
+      this.form = JSON.parse(JSON.stringify(row))
+      this.dialogVisible = true
+
+    },
     handleDelete(id) {
-      request.delete("/video/" + id).then(res => {
+      request.delete("/blog/" + id).then(res => {
         if (res.code === '0') {
           this.$message({
             type: "success",
@@ -319,3 +321,6 @@ export default {
   }
 }
 </script>
+<style>
+
+</style>

@@ -44,7 +44,7 @@
       </el-table-column>
       <el-table-column
           prop="sex"
-          label="年龄">
+          label="性别">
       </el-table-column>
       <el-table-column
           label="头像">
@@ -156,12 +156,7 @@ export default {
   created() {
     let userStr = sessionStorage.getItem("user") || "{}"
     this.user = JSON.parse(userStr)
-    // 请求服务端，确认当前登录用户的 合法信息
-    // request.get("/user/" + this.user.id).then(res => {
-    //   if (res.code === '0') {
-    //     this.user = res.data
-    //   }
-    // })
+
     this.findRoles()
     this.load()
   },
@@ -193,7 +188,7 @@ export default {
       })
     },
     filesUploadSuccess(res) {
-      this.form.imgUrl = res.data
+      this.form.imgUrl = "http://" + window.server.filesUploadUrl + ":9090"+res.data
     },
     load() {
       this.loading = true
@@ -205,9 +200,17 @@ export default {
         }
       }).then(res => {
         this.loading = false
-        this.tableData = res.data.records
         this.total = res.data.total
+        this.tableData=[]
+        let _this=this
+        res.data.records.forEach(function(user) {
+          user.imgUrl = "http://" + window.server.filesUploadUrl + ":9090"+ user.imgUrl
+          _this.tableData.push(user)
+        });
+
       })
+
+
     },
     add() {
       this.dialogVisible = true
@@ -218,6 +221,8 @@ export default {
     },
     save() {
       if (this.form.id) {  // 更新
+        console.log(this.form)
+        this.form.imgUrl= this.form.imgUrl.substring(this.form.imgUrl.indexOf("\\"))
         request.put("/user", this.form).then(res => {
           if (res.code === '0') {
             this.$message({

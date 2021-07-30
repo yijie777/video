@@ -140,13 +140,13 @@ export default {
       this.categoryIndex = index
     },
     changePhase(url, index) {
-      this.playerOptions.sources[0].src = url
+      this.playerOptions.sources[0].src ="http://" + window.server.filesUploadUrl + ":9090"+ url
       this.clickCategory(index)
     },
     getAllPhase() {
       request.get("/video/getAllPhase/" + this.$route.params.id).then(res => {
         this.phases = res.data
-        this.playerOptions.sources[0].src = this.phases[0].videoUrl
+        this.playerOptions.sources[0].src ="http://" + window.server.filesUploadUrl + ":9090"+ this.phases[0].videoUrl
       })
     },
     getVideo() {

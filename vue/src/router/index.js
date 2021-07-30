@@ -31,6 +31,7 @@ const routes = [
                     {path: '/adminUser', name: 'AdminUser', component: () => import("@/views/administratorManager/adminUser")},
                     {path: '/adminType', name: 'AdminType', component: () => import("@/views/administratorManager/adminType")},
                     {path: '/adminArticleType', name: 'AdminArticleType', component: () => import("@/views/administratorManager/adminArticleType")},
+                    {path: '/adminBlog', name: 'AdminBlog', component: () => import("@/views/administratorManager/adminBlog")},
                 ]
             },
             {path: 'vueCropper2', name: 'VueCropper2', component: () => import("@/views/administratorManager/cropper/VueCropper2")},

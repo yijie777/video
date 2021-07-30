@@ -36,6 +36,12 @@ public class UserController {
     UserMapper userMapper;
     @Autowired
     private FilePathConfig filePathConfig;
+
+    @GetMapping("/{id}")
+    public Result<?> getById(@PathVariable Long id) {
+        User user = userMapper.selectById(id);
+        return Result.success(user);
+    }
     @PutMapping
     public Result<?> update(@RequestBody User user) {
         userMapper.updateById(user);
@@ -56,7 +62,7 @@ public class UserController {
     @PostMapping("/register")
     public Result<?> register(@RequestBody User user) {
 
-        user.setImgUrl("http://"+ip+":"+port+ "/default.jpg");
+        user.setImgUrl("/default.jpg");
         user.setRoleId(2);
         User user1 = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername()));
         if(user1!=null){
