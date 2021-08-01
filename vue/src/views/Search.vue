@@ -110,7 +110,7 @@ export default {
 
 }
 </script>
-<style>
+<style scoped>
 .ly1 {
   height: 250px;
   background-color: rebeccapurple;

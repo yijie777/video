@@ -1,5 +1,5 @@
 <template>
-  <div style=" height: 61px;line-height: 60px;display: flex ">
+  <div style=" height: 61px;line-height: 60px;display: flex;min-width: 1800px">
     <div style="margin: 10px ">
       <div class="block">
 
@@ -24,12 +24,10 @@
              mode="horizontal"
              router>
       <el-menu-item index="/home">首页</el-menu-item>
-      <!--      <el-menu-item index="/dynamic">动态</el-menu-item>-->
-      <!--      <el-menu-item index="/message">消息</el-menu-item>-->
-      <el-menu-item index="/userInformation">个人中心</el-menu-item>
-      <!--      <el-menu-item index="/videoStore">视频中心</el-menu-item>-->
-      <el-menu-item index="/videoUpload">上传发布</el-menu-item>
+      <el-menu-item index="/videoStore">视频中心</el-menu-item>
       <el-menu-item index="/blog">热门博客</el-menu-item>
+      <el-menu-item index="/userInformation">个人中心</el-menu-item>
+      <el-menu-item index="/videoUpload">上传发布</el-menu-item>
       <el-menu-item index="/adminManager" :disabled="!(user.roleId === 1||user.roleId===4)">管理员后台</el-menu-item>
     </el-menu>
     <!--      搜索区域-->
@@ -90,7 +88,7 @@ export default {
     this.user = JSON.parse(str)
     this.user.imgUrl = "http://" + window.server.filesUploadUrl + ":9090" + this.user.imgUrl
     if (this.user.username === undefined) {
-      const filterArr = ['/login', '/register', '/', '/home', '/blog'];
+      const filterArr = ['/login', '/register', '/', '/home', '/videoStore', '/blog'];
       const filter = filterArr.indexOf(this.path) === -1 && this.path.indexOf("video-list-album") === -1 && this.path.indexOf("search") === -1;
       if (filter) {
         this.$message({
@@ -133,7 +131,7 @@ export default {
         }
         //是否登录的权限
         if (this.user.username === undefined) {
-          const filterArr = ['/login', '/register', '/', '/home', '/blog'];
+          const filterArr = ['/login', '/register', '/', '/home', '/videoStore', '/blog'];
           console.log(val.path)
           const filter = filterArr.indexOf(val.path) === -1 && val.path.indexOf("video-list-album") === -1 && val.path.indexOf("search") === -1;
           if (filter) {

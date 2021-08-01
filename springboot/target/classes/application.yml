@@ -17,4 +17,4 @@ filepathconfig:
   videopath: \videos\
   enclosurepath: \enclosure\
 files:
-  ip: localhost
+  ip: 10.65.29.207

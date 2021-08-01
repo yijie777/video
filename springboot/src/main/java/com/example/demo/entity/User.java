@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.xml.ws.BindingType;
+
 @TableName("user")
 @Data
 @NoArgsConstructor
@@ -24,7 +26,5 @@ public class User {
     private String address;
     private String imgUrl;
     private Integer roleId;
-//    @JsonFormat(pattern = "yyyy-MM",timezone = "GMT+8")
-//    private  String createTime;
 
 }

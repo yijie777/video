@@ -44,9 +44,9 @@ public class BlogController {
             }
         }
         Page<Blog> videoPage = blogMapper.selectPage(new Page<>(pageNum, pageSize), lwq);
-        if (videoPage.getTotal() == 0) {
-            videoPage = blogMapper.selectPage(new Page<>(pageNum, pageSize), Wrappers.<Blog>lambdaQuery().like(Blog::getArticleDesc, search));
-        }
+//        if (videoPage.getTotal() == 0) {
+//            videoPage = blogMapper.selectPage(new Page<>(pageNum, pageSize), Wrappers.<Blog>lambdaQuery().like(Blog::getArticleDesc, search));
+//        }
         return Result.success(videoPage);
     }
 

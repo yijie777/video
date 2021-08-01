@@ -3,7 +3,7 @@
     <div style="margin: 0 auto;background-color: white;width: 1000px;margin-top: 20px"
          v-loading.fullscreen.lock="fullscreenLoading">
 
-      <div style="margin-left: 30px">
+      <div >
         <ul class="home-menu">
           <li @click="searchByType('',-1)" :class="{active:categoryIndex===-1}">
             全部
@@ -15,7 +15,7 @@
           </li>
         </ul>
         <ul class="home-menu">
-          <el-radio-group v-model="sort" @click="load">
+          <el-radio-group v-model="sort" @change="load">
             <el-radio :label="0">默认</el-radio>
             <el-radio :label="-1">降序</el-radio>
             <el-radio :label="1">升序</el-radio>
@@ -24,10 +24,11 @@
 
       </div>
 
-      <div  v-show="emptyShow" style="padding: 100px">
-        <el-empty description="未找到搜索结果" ></el-empty>
-      </div>
-      <el-row>
+
+      <el-row style="min-height: 628px">
+        <div  v-show="emptyShow" style="padding-top:100px; margin: 0 auto">
+          <el-empty description="未找到搜索结果" ></el-empty>
+        </div>
         <el-col :span="24" v-for="(blog,index) in blogs">
           <div>
             <div class="blog">
@@ -35,11 +36,8 @@
                 <h3 class="titile" @click="toCSDN(blog.articleUrl)">{{ blog.articleTitle }}</h3>
                 <p class="desc" @click="toCSDN(blog.articleUrl)">
                   {{ blog.articleDesc }}
-                  提示：好多小伙伴反映，直接看到答案不太好，那我把答案的颜色设置为透明，答案位置还是在题目后面，需要鼠标选中才能看见（操作如下图），同时为了手机端的小伙伴（手机端也可以长按选中查看），我还会把所有答案放到文章最下面，希望给每天进步一点点的小伙伴更好的体验。每天进步一点点！1、在异常处理中，若try中的代码可能产生多种异常则可以对应多个catch语句，若catch中的参数类型有父类子类关系，此时应该将父类放在后面，子类放在前面。正确答案:
-                  A 你的答案: A (正确)正确错误题解：首先所有
                 </p>
                 <div class="operation">
-
                   <div><span>  {{ blog.author }}</span>
                     <span class="time">{{ blog.publish }}</span>
                     <span style="margin-right:10px;">{{ blog.commentCount }} 评论</span>
@@ -170,17 +168,18 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 
 
 .home-menu {
-  display: inline-block;
+  display: inline;
   padding: 20px;
   list-style-type: none
 }
 
 .home-menu li {
-  line-height: 40px;
+  display: inline;
+  line-height: 60px;
 }
 
 .home-menu li:hover {

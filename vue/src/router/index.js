@@ -9,8 +9,7 @@ const routes = [
         redirect: "/home",
         children: [
             {path: 'home', name: 'Home', component: () => import("@/views/Home")},
-            {path: 'dynamic', name: 'Dynamic', component: () => import("@/views/Dynamic")},
-            {path: 'message', name: 'Message', component: () => import("@/views/Message")},
+            {path: 'videoStore', name: 'VideoStore', component: () => import("@/views/VideoStore")},
             {
                 path: '/userInformation', name: 'UserInformation',redirect:'/modifyUserInformation', component: () => import("@/views/userInformation/UserInformation"), children: [
                     {path: '/modifyUserInformation', name: 'ModifyUserInformation', component: () => import("@/views/userInformation/ModifyUserInformation")},
@@ -18,7 +17,6 @@ const routes = [
                     {path: '/modifyUserIcon', name: 'ModifyUserIcon', component: () => import("@/views/userInformation/ModifyUserIcon")},
                 ]
             },
-            {path: 'videoStore', name: 'VideoStore', component: () => import("@/views/VideoStore")},
             {path: 'videoUpload', name: 'VideoUpload', component: () => import("@/views/VideoUpload")},
             {path: 'blog', name: 'Blog', component: () => import("@/views/Blog")},
             {path: 'video-list-album/:id', name: 'Video-list-album', component: () => import("@/views/VideoPlayer")},

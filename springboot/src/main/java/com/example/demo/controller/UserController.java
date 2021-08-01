@@ -62,7 +62,7 @@ public class UserController {
     @PostMapping("/register")
     public Result<?> register(@RequestBody User user) {
 
-        user.setImgUrl("/default.jpg");
+        user.setImgUrl("\\default.jpg");
         user.setRoleId(2);
         User user1 = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername()));
         if(user1!=null){
