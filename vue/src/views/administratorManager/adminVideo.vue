@@ -193,7 +193,7 @@ export default {
       })
     },
     filesUploadSuccess(res) {
-      this.form.thumbnailUrl = "http://" + window.server.filesUploadUrl + ":9090"+res.data
+      this.form.thumbnailUrl = "http://" + window.server.filesUploadUrl +window.server.port+res.data
     },
     load() {
       this.loading = true
@@ -209,7 +209,7 @@ export default {
         this.tableData=[]
         let _this=this
         res.data.records.forEach(function(video) {
-          video.thumbnailUrl = "http://" + window.server.filesUploadUrl + ":9090"+ video.thumbnailUrl
+          video.thumbnailUrl = "http://" + window.server.filesUploadUrl +window.server.port+ video.thumbnailUrl
           _this.tableData.push(video)
         });
       })

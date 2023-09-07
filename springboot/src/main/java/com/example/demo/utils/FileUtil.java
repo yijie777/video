@@ -18,7 +18,7 @@ public class FileUtil {
         if (file.exists()) { //判断文件父目录是否存在
             response.setContentType("application/octet-stream");
             response.setCharacterEncoding("UTF-8");
-            String fileName = filePath.substring(filePath.lastIndexOf("\\"));
+            String fileName = filePath.substring(filePath.lastIndexOf("/"));
             response.setHeader("Content-Disposition", "attachment;fileName=" + java.net.URLEncoder.encode(fileName, "UTF-8"));
             byte[] buffer = new byte[1024];
             FileInputStream fis = null; //文件输入流

@@ -96,7 +96,7 @@ export default {
       }
     },
     submitUpload() {
-      this.uploadBtn=true
+
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.fileList.length === 0) {
@@ -106,6 +106,7 @@ export default {
             })
             return
           }
+          this.uploadBtn=true
           this.proShow = 1
 
           let formData = new FormData()
@@ -140,9 +141,9 @@ export default {
                 message: "成功"
 
               })
-              // setTimeout(() => {
-              //   this.$router.go(0)
-              // }, 1000);
+              setTimeout(() => {
+                this.$router.go(0)
+              }, 1000);
             } else {
               this.$message({
                 type: "error",

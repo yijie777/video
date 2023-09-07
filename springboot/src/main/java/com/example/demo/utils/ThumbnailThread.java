@@ -1,7 +1,5 @@
 package com.example.demo.utils;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import java.io.InputStream;
 
 public class ThumbnailThread extends Thread {
@@ -20,9 +18,12 @@ public class ThumbnailThread extends Thread {
 	public void run() {
 		try {
 			sleep(1000);
-			String videothumbnailcommand = "cmd /c start /b D:\\software\\ffmpeg-4.4-essentials_build\\bin\\ffmpeg -i " + "\"" + saveFileName + "\""
-					+ " -y -f image2 -ss 3 -t 0.001 -s 1920*1080 " + "\"" + thumbnailUrl + "\"";
-
+//			String videothumbnailcommand = "cmd /c start /b D:\\software\\ffmpeg-4.4-essentials_build\\bin\\ffmpeg -i " + "\"" + saveFileName + "\""
+//					+ " -y -f image2 -ss 3 -t 0.001 -s 1920*1080 " + "\"" + thumbnailUrl + "\"";
+//			String videothumbnailcommand = "cmd /c start /b C:\\Users\\Administrator\\Desktop\\shipin\\web\\ffmpeg-4.4-essentials_build\\bin\\ffmpeg -i " + "\"" + saveFileName + "\""
+//					+ " -y -f image2 -ss 3 -t 0.001 -s 1920*1080 " + "\"" + thumbnailUrl + "\"";
+			String videothumbnailcommand = "ffmpeg -i " + saveFileName
+					+ " -y -f image2 -ss 3 -t 0.001 -s 1920*1080 " + thumbnailUrl ;
 			Process process = Runtime.getRuntime().exec(videothumbnailcommand);
 
 			InputStream inputStream = process.getInputStream();
@@ -33,7 +34,7 @@ public class ThumbnailThread extends Thread {
 	}
 
 	public static void main(String[] args) {
-		ThumbnailThread thumbnailThread=new ThumbnailThread("D:\\3.mp4","D:\\3.jpg");
+		ThumbnailThread thumbnailThread=new ThumbnailThread("/Users/zhuyijie/Study/4.mp4","/Users/zhuyijie/Study/2.jpg");
 		Thread thread = new Thread(thumbnailThread);
 		thread.start();
 	}

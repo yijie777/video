@@ -1,26 +1,14 @@
 <template>
-  <div style="background-color:rgb(230,236,240);min-width: 1800px">
-    <div style="margin: 20px 200px;background-color: white;border-radius: 5px">
+  <div style="background-color:rgb(230,236,240);">
+    <div style="margin: 20px 100px;border-radius: 5px">
 
-      <div style="margin-left: 30px">
-        <ul class="home-menu" v-for="(item, index) in types" :key="index">
-          <li>
-            {{ item.typeName }}
-            {{ videos[item.id] }}
-          </li>
-          <el-row>
-            <el-col :span="6" v-for="i in videos[item.id]">
-              <div class="grid-content bg-purple ly1">
-                <el-image class="img-link" style="width: 100%; height: 100%" :src="i.thumbnailUrl" :fit="'cover'"
-                          @click="goAblum(i)">
-
-                </el-image>
-              </div>
-              <div class="link" style="margin: 0 30px" @click="goAblum(i)">{{ i.name }}</div>
-            </el-col>
-          </el-row>
-        </ul>
-      </div>
+      <el-carousel :interval="4000" type="card" height="400px">
+        <el-carousel-item v-for="i in img" :key="i">
+          <div class="block">
+            <el-image :src="i" style="height: 400px;width: 860px" fit="cover"></el-image>
+          </div>
+        </el-carousel-item>
+      </el-carousel>
 
 
     </div>
@@ -46,45 +34,28 @@ export default {
       pageSize: 8,
       total: 10,
       type: '',
+      img: [
+        "https://tse3-mm.cn.bing.net/th/id/OIP-C.sX4vpG_5ugWGVZ84EXOPLgHaEK?w=333&h=187&c=7&r=0&o=5&dpr=2&pid=1.7",
+        "https://tse4-mm.cn.bing.net/th/id/OIP-C.2F3tsUNi3DolHGyFcF7ElQHaEK?w=319&h=180&c=7&r=0&o=5&dpr=2&pid=1.7",
+        "https://tse1-mm.cn.bing.net/th/id/OIP-C.gd2thIjxqkjX5kubpCVNnQHaDZ?w=348&h=160&c=7&r=0&o=5&dpr=2&pid=1.7",
+        "https://tse3-mm.cn.bing.net/th/id/OIP-C.IGG5kf3aa6sdhoP5rDjCzwHaEo?w=257&h=180&c=7&r=0&o=5&dpr=2&pid=1.7",
+        "https://tse1-mm.cn.bing.net/th/id/OIP-C.3z9Wq7GFD3Lm9EzVuSinewHaFN?w=281&h=198&c=7&r=0&o=5&dpr=2&pid=1.7",
+      ]
     }
   },
   created() {
-    this.findTypes()
   },
   methods: {
     clickCategory(index) { // 这里我们传入一个当前值
       this.categoryIndex = index
     },
 
-    findTypes() {
-      request.get("/type").then(res => {
-        let _this = this
-        this.types = res.data
-        this.types.forEach(function (type) {
-          let resVideoList = []
-          request.get("/video", {
-            params: {
-              type: type.typeName
-            }
-          }).then(res => {
-            res.data.records.forEach(function (video) {
-              video.thumbnailUrl = "http://" + window.server.filesUploadUrl + ":9090" + video.thumbnailUrl
-              resVideoList.push(video)
-            });
-          })
-          _this.videos[type.id] = resVideoList
-        })
-        console.log(this.videos)
-      })
-
-    },
     goAblum(item) {
       this.$router.push({path: `/${this.path}/${item.id}`})
     },
     watch: {
       $route: {
         handler: function (val, oldVal) {
-          this.findTypes()
         },
         deep: true
       }
@@ -94,23 +65,6 @@ export default {
 }
 </script>
 <style scoped>
-.ly1 {
-  margin: 30px;
-}
-
-.link:hover {
-  color: cornflowerblue;
-  cursor: pointer;
-}
-
-.img-link:hover {
-  cursor: pointer;
-}
-
-.home-menu {
-  padding: 20px;
-  list-style-type: none
-}
 
 .home-menu li {
   line-height: 40px;
@@ -121,9 +75,19 @@ export default {
   cursor: pointer;
 }
 
-.active {
-  font-weight: 600;
-  color: dodgerblue;
-  border-bottom: 3px solid dodgerblue;
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+  background-color: #d3dce6;
 }
 </style>

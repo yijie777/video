@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color:rgb(230,236,240);min-width: 1800px">
+  <div style="background-color:rgb(230,236,240);">
     <div style="margin: 0 auto;background-color: white;width: 1000px;margin-top: 20px"
          v-loading.fullscreen.lock="fullscreenLoading">
 
@@ -33,8 +33,8 @@
           <div>
             <div class="blog">
               <div class="content">
-                <h3 class="titile" @click="toCSDN(blog.articleUrl)">{{ blog.articleTitle }}</h3>
-                <p class="desc" @click="toCSDN(blog.articleUrl)">
+                <h3 class="titile" @click="toCSDN(blog)">{{ blog.articleTitle }}</h3>
+                <p class="desc" @click="toCSDN(blog)">
                   {{ blog.articleDesc }}
                 </p>
                 <div class="operation">
@@ -75,9 +75,11 @@
       </div>
 
     </div>
-    <div style="text-align: center;margin: 10px 0">
-      Copyright © 2021 Zhu-Yijie
-    </div>
+
+
+    <el-dialog title="详细信息" v-model="dialogVisible" width="60%" >
+      <div v-html='context'></div>
+     </el-dialog>
   </div>
 </template>
 
@@ -89,6 +91,8 @@ export default {
   name: 'Blog',
   data() {
     return {
+      context:"",
+      dialogVisible: false,
       fullscreenLoading: false,
       categoryIndex: -1,
       types: [],
@@ -112,8 +116,11 @@ export default {
     this.findTypes()
   },
   methods: {
-    toCSDN(articleUrl) {
-      window.open(articleUrl)
+    toCSDN(blog) {
+      // window.open(articleUrl)
+      this.dialogVisible = true
+      this.context = blog.articleContext
+      console.log(blog)
     },
     clickCategory(index) { // 这里我们传入一个当前值
       this.categoryIndex = index
@@ -224,4 +231,5 @@ export default {
 .desc:hover {
   cursor: pointer;
 }
+
 </style>

@@ -188,7 +188,7 @@ export default {
       })
     },
     filesUploadSuccess(res) {
-      this.form.imgUrl = "http://" + window.server.filesUploadUrl + ":9090"+res.data
+      this.form.imgUrl = "http://" + window.server.filesUploadUrl +window.server.port+res.data
     },
     load() {
       this.loading = true
@@ -204,7 +204,7 @@ export default {
         this.tableData=[]
         let _this=this
         res.data.records.forEach(function(user) {
-          user.imgUrl = "http://" + window.server.filesUploadUrl + ":9090"+ user.imgUrl
+          user.imgUrl = "http://" + window.server.filesUploadUrl +window.server.port+ user.imgUrl
           _this.tableData.push(user)
         });
 
@@ -221,8 +221,7 @@ export default {
     },
     save() {
       if (this.form.id) {  // 更新
-        console.log(this.form)
-        this.form.imgUrl= this.form.imgUrl.substring(this.form.imgUrl.indexOf("\\"))
+        this.form.imgUrl= this.form.imgUrl.substring(this.form.imgUrl.indexOf("/"))
         request.put("/user", this.form).then(res => {
           if (res.code === '0') {
             this.$message({
@@ -282,6 +281,7 @@ export default {
       })
     },
     handleEdit(row) {
+      console.log(row)
       this.form = JSON.parse(JSON.stringify(row))
       this.dialogVisible = true
       this.$nextTick(() => {

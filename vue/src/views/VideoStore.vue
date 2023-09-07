@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color:rgb(230,236,240);min-width: 1800px">
+  <div style="background-color:rgb(230,236,240);">
     <div style="margin: 20px 200px;background-color: white;border-radius: 5px"
          v-loading.fullscreen.lock="fullscreenLoading">
 
@@ -48,7 +48,7 @@
 
     </div>
     <div style="text-align: center;margin: 10px 0">
-      Copyright © 2021 Zhu-Yijie
+<!--      Copyright © 2021 Zhu-Yijie-->
     </div>
   </div>
 </template>
@@ -112,7 +112,7 @@ export default {
         let _this = this
 
         res.data.records.forEach(function (video) {
-          video.thumbnailUrl = "http://" + window.server.filesUploadUrl + ":9090" + video.thumbnailUrl
+          video.thumbnailUrl = "http://" + window.server.filesUploadUrl + window.server.port + video.thumbnailUrl
           _this.videos.push(video)
         });
       })

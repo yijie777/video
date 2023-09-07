@@ -18,12 +18,14 @@ public class MyWebAppConfigurer extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/resources/")
                 .addResourceLocations("classpath:/static/")
                 .addResourceLocations("classpath:/public/");
+//        String pre ="file:///";
+        String pre ="file:";
         registry.addResourceHandler("/images/**").
-                addResourceLocations("file:///"+filePathConfig.getFileUrl()+filePathConfig.getImagePath());
+                addResourceLocations(pre+filePathConfig.getFileUrl()+filePathConfig.getImagePath());
         registry.addResourceHandler("/videos/**").
-                addResourceLocations("file:///"+filePathConfig.getFileUrl()+filePathConfig.getVideoPath());
+                addResourceLocations(pre+filePathConfig.getFileUrl()+filePathConfig.getVideoPath());
         registry.addResourceHandler("/enclosure/**").
-                addResourceLocations("file:///"+filePathConfig.getFileUrl()+filePathConfig.getEnclosurePath());
+                addResourceLocations(pre+filePathConfig.getFileUrl()+filePathConfig.getEnclosurePath());
         super.addResourceHandlers(registry);
     }
 

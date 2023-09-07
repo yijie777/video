@@ -81,7 +81,7 @@ public class FileController {
         String filePath = filePathConfig.getFileUrl() + filePathConfig.getVideoPath(); //视频存放的根目录
 
         for (Phase p : phases) {
-            String videoPath = filePath + p.getVideoUrl().substring(p.getVideoUrl().lastIndexOf("\\"));
+            String videoPath = filePath + p.getVideoUrl().substring(p.getVideoUrl().lastIndexOf("/"));
             videoPathList.add(new File(videoPath));
         }
         String zipPath = filePath + uuid + ".zip";
@@ -96,6 +96,7 @@ public class FileController {
                                  @RequestParam String describe,
                                  @RequestParam(required = false) Integer userId,
                                  @RequestParam String type) throws IOException {
+        System.out.println("开始上传");
         long start = System.currentTimeMillis();
         //要保存的视频信息
         Video video = new Video();
@@ -118,7 +119,7 @@ public class FileController {
                 String originalFilename = enclosure.getOriginalFilename();//视频标题
                 String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));//视频后缀
 
-                String saveFileName = filePathConfig.getEnclosurePath() + flag1 + "\\" + originalFilename + suffix;
+                String saveFileName = filePathConfig.getEnclosurePath() + flag1 + "/" + originalFilename + suffix;
                 String fileRealPath = filePathConfig.getFileUrl() + saveFileName;
                 File dest = new File(fileRealPath);
                 if (!dest.getParentFile().exists()) {
@@ -182,7 +183,7 @@ public class FileController {
 
         //截图并保存
         String firsFilePath = lastVideoUrl;
-        String saveFileName = filePathConfig.getFileUrl() + firsFilePath.substring(firsFilePath.indexOf("\\"));
+        String saveFileName = filePathConfig.getFileUrl() + firsFilePath.substring(firsFilePath.indexOf("/"));
         ThumbnailThread thumbnailThread =
                 new ThumbnailThread(saveFileName, thumbnailRealPath);
         thumbnailThread.start();

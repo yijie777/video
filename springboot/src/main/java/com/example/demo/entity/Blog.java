@@ -31,4 +31,5 @@ public class Blog {
     private String articleTags;
     private String articleType;
     private String articleDesc;
+    private String articleContext;
 }

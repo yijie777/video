@@ -1,5 +1,5 @@
 <template>
-  <div style=" height: 61px;line-height: 60px;display: flex;min-width: 1800px">
+  <div style=" height: 61px;line-height: 60px;display: flex;width: 100%;min-width: 1000px">
     <div style="margin: 10px ">
       <div class="block">
 
@@ -7,10 +7,11 @@
           <router-link :to="imgPath">
             <el-avatar :size="40" :src="user.imgUrl">登录</el-avatar>
           </router-link>
-          <template #dropdown>
-            <el-dropdown-menu v-if="user.username!==undefined">
-              <el-dropdown-item @click="$router.push('/modifyUserInformation')">个人信息</el-dropdown-item>
-              <el-dropdown-item @click="loginOut">退出系统</el-dropdown-item>
+          <template #dropdown >
+            <el-dropdown-menu >
+              <el-dropdown-item v-if="user.username!==undefined" @click="$router.push('/modifyUserInformation')">个人信息</el-dropdown-item>
+              <el-dropdown-item v-if="user.username!==undefined" @click="loginOut">退出系统</el-dropdown-item>
+              <el-dropdown-item v-if="user.username===undefined" @click="toLogin">点击登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -56,6 +57,9 @@ export default {
     };
   },
   methods: {
+    toLogin() {
+      this.$router.push("/login")
+    },
     loginOut() {
       sessionStorage.removeItem("user")
       this.$router.push("/login")
@@ -86,7 +90,7 @@ export default {
     //权限
     let str = sessionStorage.getItem("user") || "{}"
     this.user = JSON.parse(str)
-    this.user.imgUrl = "http://" + window.server.filesUploadUrl + ":9090" + this.user.imgUrl
+    this.user.imgUrl = "http://" + window.server.filesUploadUrl +window.server.port + this.user.imgUrl
     if (this.user.username === undefined) {
       const filterArr = ['/login', '/register', '/', '/home', '/videoStore', '/blog'];
       const filter = filterArr.indexOf(this.path) === -1 && this.path.indexOf("video-list-album") === -1 && this.path.indexOf("search") === -1;

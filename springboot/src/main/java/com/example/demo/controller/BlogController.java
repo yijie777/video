@@ -28,13 +28,21 @@ public class BlogController {
                               @RequestParam(required = false) Integer sort) {
 
         LambdaQueryWrapper<Blog> lwq = Wrappers.<Blog>lambdaQuery();
-        if (StrUtil.isNotBlank(type)) {
-            lwq.like(Blog::getArticleType, type);
+
+        if(StrUtil.isNotBlank(type)&&StrUtil.isNotBlank(search)){
+           lwq.like(Blog::getArticleType, type).and(wrapper ->wrapper.like(Blog::getArticleTitle, search)
+                   .or().like(Blog::getArticleTags, search))
+                   .or().like(Blog::getArticleType, search);
+        }else{
+            if (StrUtil.isNotBlank(type)) {
+                lwq.like(Blog::getArticleType, type);
+            }
+            if (StrUtil.isNotBlank(search)) {
+                lwq.like(Blog::getArticleTitle, search)
+                        .or().like(Blog::getArticleTags, search)
+                        .or().like(Blog::getArticleType, search);
         }
-        if (StrUtil.isNotBlank(search)) {
-            lwq.like(Blog::getArticleTitle, search)
-                    .or().like(Blog::getArticleTags, search)
-                    .or().like(Blog::getArticleType, search);
+
         }
         if (sort != null) {
             if (sort == -1) {

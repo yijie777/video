@@ -11,11 +11,6 @@ spring:
     multipart:
       max-file-size: 81920MB
       max-request-size: 81920MB
-#filepathconfig:
-#  fileUrl: /Users/zhuyijie/mydata/video
-#  imagePath: /images/
-#  videopath: /videos/
-#  enclosurepath: /enclosure/
 filepathconfig:
   fileUrl: /upload/video
   imagePath: /images/

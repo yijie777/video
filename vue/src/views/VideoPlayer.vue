@@ -20,12 +20,15 @@
               class="el-icon-download el-icon--right"></i></el-button>
           <el-button type="primary" size="small" @click="dialogVisible=true">下载视频<i
               class="el-icon-download el-icon--right"></i></el-button>
-          <div v-for="(item, index) in phases" :key="index" class="video-list" style="width: 100%">
-            <p @click="changePhase(item.videoUrl,index)" :class="{active:categoryIndex===index}"
-               style="overflow: hidden;white-space: nowrap; text-overflow:ellipsis; ">
-              {{ item.name }}
-            </p>
-          </div>
+          <el-scrollbar height="420px">
+            <div v-for="(item, index) in phases" :key="index" class="video-list" style="width: 100%">
+              <p @click="changePhase(item.videoUrl,index)" :class="{active:categoryIndex===index}"
+                 style="overflow: hidden;white-space: nowrap; text-overflow:ellipsis; ">
+                {{ item.name }}
+              </p>
+            </div>
+          </el-scrollbar>
+
         </div>
 
       </el-col>
@@ -83,7 +86,7 @@ export default {
           //类型
           type: "video/mp4",
           //url地址
-          src: 'http://' + window.server.filesUploadUrl + ':9090/defaultVideo.mp4'
+          src: 'http://' + window.server.filesUploadUrl + window.server.port+"/defaultVideo.mp4"
         }],
         //你的封面地址
         poster: '',
@@ -134,19 +137,19 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.phases.length;
     },
     downloadEnclosure() {
-      window.open("http://" + window.server.filesUploadUrl + ":9090/files/download/" + this.video.id)
+      window.open("http://" + window.server.filesUploadUrl + window.server.port+"/files/download/" + this.video.id)
     },
     clickCategory(index) { // 这里我们传入一个当前值
       this.categoryIndex = index
     },
     changePhase(url, index) {
-      this.playerOptions.sources[0].src ="http://" + window.server.filesUploadUrl + ":9090"+ url
+      this.playerOptions.sources[0].src ="http://" + window.server.filesUploadUrl + window.server.port+ url
       this.clickCategory(index)
     },
     getAllPhase() {
       request.get("/video/getAllPhase/" + this.$route.params.id).then(res => {
         this.phases = res.data
-        this.playerOptions.sources[0].src ="http://" + window.server.filesUploadUrl + ":9090"+ this.phases[0].videoUrl
+        this.playerOptions.sources[0].src ="http://" + window.server.filesUploadUrl + window.server.port+ this.phases[0].videoUrl
       })
     },
     getVideo() {
@@ -161,7 +164,7 @@ export default {
           this.$message.error("下载发生错误")
           this.showTips = false
         } else {
-          window.open("http://" + window.server.filesUploadUrl + ":9090/files/downloadVideo/" + res.data)
+          window.open("http://" + window.server.filesUploadUrl + window.server.port+"/files/downloadVideo/" + res.data)
           this.showTips = false
         }
       })
@@ -191,11 +194,12 @@ export default {
 }
 
 .scroll-module {
+  /*height: 520px;*/
   padding: 10px;
   margin-left: 30px;
   margin-right: 30px;
   background-color: rgb(244, 244, 244);
-  height: 100%;
+  /*height: 100%;*/
   line-height: 30px;
   border-radius: 3px
 }

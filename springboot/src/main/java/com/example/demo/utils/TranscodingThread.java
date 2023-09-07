@@ -21,7 +21,9 @@ public class TranscodingThread extends Thread{
     }
     @Override
     public void run()  {
-        String videothumbnailcommand = "cmd /c start /b D:\\software\\ffmpeg-4.4-essentials_build\\bin\\ffmpeg  -i " + saveFileName
+//        String videothumbnailcommand = "cmd /c start /b D:\\software\\ffmpeg-4.4-essentials_build\\bin\\ffmpeg  -i " + saveFileName
+//                + " -y -ab 35200  -ar 22050  " + transcodingUrl;
+        String videothumbnailcommand = "ffmpeg  -i " + saveFileName
                 + " -y -ab 35200  -ar 22050  " + transcodingUrl;
         try {
             Process process = Runtime.getRuntime().exec(videothumbnailcommand);
@@ -38,7 +40,7 @@ public class TranscodingThread extends Thread{
     }
 
     public static void main(String[] args) {
-        TranscodingThread thumbnailThread = new TranscodingThread("E:\\3.avi", "E:\\4.mp4");
+        TranscodingThread thumbnailThread = new TranscodingThread("/Users/zhuyijie/Study/4.mp4", "/Users/zhuyijie/Study/3.mp4");
         thumbnailThread.start();
     }
 
@@ -59,7 +61,7 @@ public class TranscodingThread extends Thread{
                 while (this != null) {
                     int _ch = is.read();
                     if (_ch != -1){
-//                        System.out.print((char) _ch);
+                        System.out.print((char) _ch);
                     }else{
                         break;
                     }

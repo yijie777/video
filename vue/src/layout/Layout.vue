@@ -2,8 +2,7 @@
 <div>
   <Header></Header>
   <!--      主题-->
-  <div style="display: flex;flex-direction: column;">
-
+  <div style="display: flex;flex-direction: column;width: 100%;min-width: 1000px">
     <!--        内容区域-->
     <router-view style="flex:1"/>
 

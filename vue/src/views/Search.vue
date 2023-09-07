@@ -74,7 +74,7 @@ export default {
         let _this = this
 
         res.data.records.forEach(function (video) {
-          video.thumbnailUrl = "http://" + window.server.filesUploadUrl + ":9090" + video.thumbnailUrl
+          video.thumbnailUrl = "http://" + window.server.filesUploadUrl + window.server.port + video.thumbnailUrl
           _this.videos.push(video)
         });
         this.total = res.data.total
